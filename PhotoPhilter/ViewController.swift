@@ -30,8 +30,9 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    
     let galleryOption = UIAlertAction(title: "Gallery", style: UIAlertActionStyle.Default) { (action) -> Void in println("gallery pressed")
+      let galleryVC = GalleryViewController()
+      self.navigationController?.pushViewController(galleryVC, animated: true)
     }
     self.alertController.addAction(galleryOption)
   }
