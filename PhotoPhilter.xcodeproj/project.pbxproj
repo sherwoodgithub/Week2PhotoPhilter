@@ -16,6 +16,7 @@
 		B85FB64F1A65FE89003F6C14 /* GalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FB64E1A65FE89003F6C14 /* GalleryCell.swift */; };
 		B85FB6511A660243003F6C14 /* image2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B85FB6501A660243003F6C14 /* image2.jpg */; };
 		B85FB6531A66024B003F6C14 /* image1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B85FB6521A66024B003F6C14 /* image1.jpg */; };
+		B85FB6551A6717F1003F6C14 /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FB6541A6717F1003F6C14 /* Thumbnail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		B85FB64E1A65FE89003F6C14 /* GalleryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCell.swift; sourceTree = "<group>"; };
 		B85FB6501A660243003F6C14 /* image2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image2.jpg; sourceTree = "<group>"; };
 		B85FB6521A66024B003F6C14 /* image1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image1.jpg; sourceTree = "<group>"; };
+		B85FB6541A6717F1003F6C14 /* Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				B85FB6521A66024B003F6C14 /* image1.jpg */,
 				B85FB6501A660243003F6C14 /* image2.jpg */,
 				B85FB62E1A65C81B003F6C14 /* ViewController.swift */,
+				B85FB6541A6717F1003F6C14 /* Thumbnail.swift */,
 				B85FB6331A65C81B003F6C14 /* Images.xcassets */,
 				B85FB6351A65C81B003F6C14 /* LaunchScreen.xib */,
 				B85FB62A1A65C81B003F6C14 /* Supporting Files */,
@@ -225,6 +228,7 @@
 				B85FB64F1A65FE89003F6C14 /* GalleryCell.swift in Sources */,
 				B85FB64D1A65F914003F6C14 /* GalleryViewController.swift in Sources */,
 				B85FB62F1A65C81B003F6C14 /* ViewController.swift in Sources */,
+				B85FB6551A6717F1003F6C14 /* Thumbnail.swift in Sources */,
 				B85FB62D1A65C81B003F6C14 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

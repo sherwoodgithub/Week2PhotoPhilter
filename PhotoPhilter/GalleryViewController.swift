@@ -8,17 +8,24 @@
 
 import UIKit
 
-class GalleryViewController: UIViewController, UICollectionViewDataSource {
+protocol ImageSelectedProtocol {
+  func controllerDidSelectImage(UIImage) -> Void
+}
+
+
+class GalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
   
   var collectionView : UICollectionView!
   var images = [UIImage]()
-
+  var delegate : ImageSelectedProtocol?
+  
   override func loadView() {
     let rootView = UIView(frame: UIScreen.mainScreen().bounds)
     let collectionViewFlowLayout = UICollectionViewFlowLayout()
     self.collectionView = UICollectionView (frame: rootView.frame, collectionViewLayout: collectionViewFlowLayout)
     rootView.addSubview(self.collectionView)
     collectionView.dataSource = self
+    collectionView.delegate = self
     collectionViewFlowLayout.itemSize = CGSize(width: 200, height: 200)
     
     
@@ -48,4 +55,13 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource {
     cell.imageView.image = image
     return cell
   }
+  
+//MARK: UICollectionViewDelegate
+  
+  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    self.delegate?.controllerDidSelectImage(self.images[indexPath.row])
+    
+    self.navigationController?.popViewControllerAnimated(true)
+  }
+  
 }
