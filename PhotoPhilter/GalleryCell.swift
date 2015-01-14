@@ -23,5 +23,7 @@ class GalleryCell: UICollectionViewCell {
   required init(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
+ 
   
+  ///COME ONNNNN
 }
