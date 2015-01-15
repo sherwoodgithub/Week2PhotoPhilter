@@ -24,10 +24,9 @@ class GalleryViewController: UIViewController, UICollectionViewDataSource, UICol
     let collectionViewFlowLayout = UICollectionViewFlowLayout()
     self.collectionView = UICollectionView (frame: rootView.frame, collectionViewLayout: collectionViewFlowLayout)
     rootView.addSubview(self.collectionView)
-    collectionView.dataSource = self
-    collectionView.delegate = self
+    self.collectionView.dataSource = self
+    self.collectionView.delegate = self
     collectionViewFlowLayout.itemSize = CGSize(width: 200, height: 200)
-    
     
     self.view = rootView
   }

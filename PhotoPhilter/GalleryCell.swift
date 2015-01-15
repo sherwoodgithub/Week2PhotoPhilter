@@ -11,13 +11,10 @@ import UIKit
 class GalleryCell: UICollectionViewCell {
   let imageView = UIImageView()
   
-  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.addSubview(self.imageView)
-    
     //make the subview (imageView) the same size as the frame
-    
     imageView.frame = self.bounds
     imageView.contentMode = UIViewContentMode.ScaleAspectFill
     imageView.layer.masksToBounds = true
@@ -27,6 +24,4 @@ class GalleryCell: UICollectionViewCell {
     super.init(coder: aDecoder)
   }
  
-  
-  ///COME ONNNNN
 }

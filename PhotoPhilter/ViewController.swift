@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Social
 
-class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewDataSource {
+class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   
       let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: UIAlertControllerStyle.ActionSheet)
   let mainImageView = UIImageView()
@@ -19,6 +20,9 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
   let imageQueue = NSOperationQueue()
   var gpuContext : CIContext!
   var thumbnails = [Thumbnail]()
+  var doneButton : UIBarButtonItem!
+  var shareButton : UIBarButtonItem!
+  
   
   
   override func loadView() {
@@ -46,15 +50,20 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
     self.setupConstraintsOnRootView(rootView, forViews: views)
     self.view = rootView
   }
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    self.doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "donePressed")
+    self.shareButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "sharePressed")
+    self.navigationItem.rightBarButtonItem = self.shareButton
     
     let galleryOption = UIAlertAction(title: "Gallery", style: UIAlertActionStyle.Default) { (action) -> Void in println("gallery pressed")
       let galleryVC = GalleryViewController()
       galleryVC.delegate = self
       self.navigationController?.pushViewController(galleryVC, animated: true)
     }
+    
     self.alertController.addAction(galleryOption)
     //????
       let filterOption = UIAlertAction(title: "Filter", style: UIAlertActionStyle.Default) { (action) -> Void in
@@ -62,9 +71,33 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
       UIView.animateWithDuration(0.4, animations: { () -> Void in
         self.view.layoutIfNeeded()
       })
+        
+      let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "donePressed")
+      self.navigationItem.rightBarButtonItem = doneButton
     }
     self.alertController.addAction(filterOption)
     
+    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+      let cameraOption = UIAlertAction(title: "Camera", style: .Default, handler: { (action) -> Void in
+        
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = UIImagePickerControllerSourceType.Camera
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        self.presentViewController(imagePickerController, animated: true, completion: nil)
+      })
+      self.alertController.addAction(cameraOption)
+    }
+    
+    let photoOption = UIAlertAction(title: "Photos", style: .Default) { (action) -> Void in
+      let photoVC = PhotosViewController()
+      photoVC.destinationImageSize = self.mainImageView.frame.size
+      photoVC.delegate = self
+      self.navigationController?.pushViewController(photoVC, animated: true)
+      }
+      
+    
+
     let options = [kCIContextWorkingColorSpace : NSNull()] //disabling for speed
     let eaglContext = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
     self.gpuContext = CIContext(EAGLContext: eaglContext, options: options)
@@ -87,8 +120,16 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
     
     for thumbnail in self.thumbnails {
       thumbnail.originalImage = self.originalThumbnail
+      thumbnail.filteredImage = nil
     }
     self.collectionView.reloadData()
+  }
+//MARK: UIImagePickerController
+  
+  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    let image = info[UIImagePickerControllerEditedImage] as? UIImage
+    self.controllerDidSelectImage(image!)
+    picker.dismissViewControllerAnimated(true, completion: nil)
   }
   
 //MARK: Button Selectors
@@ -101,9 +142,26 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
     UIGraphicsBeginImageContext(size)
     originalImage.drawInRect(CGRect(x: 0, y: 0, width: 100, height: 100))
     self.originalThumbnail = UIGraphicsGetImageFromCurrentImageContext()
-    
+    UIGraphicsEndImageContext()
   }
   
+  func donePressed() {
+    self.collectionViewYConstraint.constant = -120
+    UIView.animateWithDuration(0.4, animations: { () -> Void in
+      self.view.layoutIfNeeded()
+    })
+  }
+  
+  func sharePressed() {
+    if SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter) {
+      let compViewController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+      compViewController.addImage(self.mainImageView.image)
+      self.presentViewController(compViewController, animated: true, completion: nil)
+    } else {
+      //tell user to sign into twitter
+    }
+    
+  }
 //MARK: UICollectionViewDataSource
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return self.thumbnails.count
@@ -113,13 +171,11 @@ class ViewController: UIViewController, ImageSelectedProtocol, UICollectionViewD
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FILTER_CELL", forIndexPath: indexPath) as GalleryCell
     let thumbnail = self.thumbnails[indexPath.row]
     if thumbnail.originalImage != nil {
-    if thumbnail.filteredImage == nil {
-      thumbnail.generateFilteredImage()
-      cell.imageView.image = thumbnail.filteredImage!
-      
+      if thumbnail.filteredImage == nil {
+        thumbnail.generateFilteredImage()
+        cell.imageView.image = thumbnail.filteredImage!
+      }
     }
-    }
-//    cell.imageView.image = self.originalThumbnail
     return cell
   }
   

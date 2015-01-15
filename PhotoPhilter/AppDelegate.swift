@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let rootVC = ViewController()
     //nav controller:
     let navController = UINavigationController(rootViewController: rootVC)
+    //change navBar color : navController.navigationBar.barTintColor = UIColor.blueColor()
     self.window?.rootViewController = navController
     
     return true
